@@ -12,12 +12,13 @@ struct arvore{
 
 };
 
-tArvore *criaArvore(char letra, int n){
+tArvore *criaArvore(char letra, int n,tArvore *dir, tArvore *esq){
 
     tArvore *a = (tArvore*)malloc(sizeof(tArvore)); 
 
     a->letra = letra;
-    a->dir = a->esq = NULL;
+    a->dir = dir;
+    a->esq = esq;
     a->n = n;
     return a;
 }
@@ -62,38 +63,49 @@ void ordenaArvores(tArvore **arvores,int n){
     ordenaArvores(arvores+a+1,n-a-1);
 }
 
+tArvore *juntaArvores(tArvore **arvores,int n){
 
+    if(n<=1) return arvores[0];
+    tArvore *temp = criaArvore('\0',arvores[0]->n + arvores[1]->n,arvores[1],arvores[0]);
+
+    
+    for(int i=0;i<n-2;i++){
+        arvores[i] = arvores[i+2];
+    }
+    arvores[n-2] = temp;
+
+    return juntaArvores(arvores,n-1);
+}
 
 tArvore *transformaStringArv(char *string){
+
     int x =0,repetidos = 0;
     int tamanho = (int)strlen[string];
     int *indices = calloc(128,sizeof(int)); //inicializados como 0
     
     //contando quantos caracteres tem de cada e vendo quantos repetidos
     while (x<tamanho){
-        
-        indices[string[x]]+=1;
-        if(indices[string[x]]>1) repetidos++;
+        indices[(int)string[x]]+=1;
+        if(indices[(int)string[x]]>1) repetidos++;
         x++;
     }
 
     //fazendo a reducao de um vetor de 128 pra um menor
-    tArvore arvores[tamanho-repetidos];
+    tArvore arvores = malloc(sizeof(tArvore*)*(tamanho-repetidos));
     int ind = 0;
 
     for(int i=0;i<128;i++){
+
         if(indices[i]!=0){
-            arvores[ind].n = indices[i];
-            arvores[ind].letra = i;
+            arvores[ind] = criaArvore((char)i,indices[i],NULL,NULL);
+            ind++;
         } 
-        ind++;
+        
     }
     free(indices);
 
     //ordenando o vetor de arvores
-    for(){
-
-    }
+    ordenaArvores(arvores,tamanho-repetidos);
 
 
 

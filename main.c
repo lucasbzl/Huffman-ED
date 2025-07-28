@@ -16,6 +16,10 @@ void ordena(int *numeros, int n){
             break;
         }
     }
+    for(int i=0; i<n;i++){
+        printf("%d ",numeros[i]);
+    }
+    printf("\n");
     //caminhando com o a
     for(a=0;a<b;a++){
         if(numeros[b] < numeros[a]){
@@ -27,6 +31,10 @@ void ordena(int *numeros, int n){
         }
 
     }
+     for(int i=0; i<n;i++){
+        printf("%d ",numeros[i]);
+    }
+    printf("\n");
 
     
     //ordenando subvetores
@@ -41,7 +49,7 @@ void ordena(int *numeros, int n){
 
 int main(){
 
-    int numeros[11] = {3,0,1,4,2,5,7,10,9,8,6};
+    int numeros[11] = {7,1,1,2,2,5,3,10,9,8,6};
 
     ordena(numeros,11);
 
