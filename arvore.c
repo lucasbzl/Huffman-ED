@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "arvore.h"
+#include "bitmap.h"
+#include <string.h>
 
 struct arvore{
 
@@ -24,7 +26,8 @@ tArvore *criaArvore(char letra, int n,tArvore *dir, tArvore *esq){
 }
 
 void desalocaArvore(tArvore *a){
-
+    if(a->dir!=NULL) desalocaArvore(a->dir);
+    if(a->esq!=NULL) desalocaArvore(a->esq);
     free(a);
 
 }
@@ -91,7 +94,7 @@ tArvore *transformaStringArv(char *string){
     }
 
     //fazendo a reducao de um vetor de 128 pra um menor
-    tArvore arvores = malloc(sizeof(tArvore*)*(tamanho-repetidos));
+    tArvore **arvores = malloc(sizeof(tArvore*)*(tamanho-repetidos));
     int ind = 0;
 
     for(int i=0;i<128;i++){
@@ -106,11 +109,43 @@ tArvore *transformaStringArv(char *string){
 
     //ordenando o vetor de arvores
     ordenaArvores(arvores,tamanho-repetidos);
+    tArvore *temp = malloc(sizeof(tArvore*));
+    temp = juntaArvores(arvores,tamanho-repetidos);
+    free(arvores);
 
 
+    return temp;
+}
 
-    tArvore *a = criaArvore(NULL,NULL);
-    return a;
+int ehFolha(tArvore *a){
+
+    if(a->dir==NULL && a->esq==NULL) return 1;
+    else return 0;
+
+}
+
+
+char *traduzBits(tArvore *r, bitmap *bm){
+
+    tArvore *temp = r;
+    char *string[100];
+    int ind=0;
+
+    for(int i=0;i< bitmapGetLength(bm);i++){
+
+        if(bitmapGetBit(bm,i)) temp = temp->dir;
+        else temp = temp->esq;
+        
+        if(ehFolha(temp)){
+            string[ind] = temp->letra;
+            ind++;
+            temp = r;
+        }
+
+    }
+
+    char *string2 = strdup(string);
+    return string2;
 }
 
 
@@ -122,7 +157,7 @@ tArvore *transformaStringArv(char *string){
 
 
 
-
+/*
 tArvore *insere(tArvore *r, int letra){
 
     if(r == NULL){
@@ -185,3 +220,4 @@ tArvore *retira(tArvore *r, int letra){
     return r;
 
 }
+    */
