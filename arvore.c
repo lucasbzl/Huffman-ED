@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "arvore.h"
-#include "bitmap.h"
+
 #include <string.h>
 
 struct arvore{
@@ -39,7 +39,7 @@ void ordenaArvores(tArvore **arvores,int n){
 
     if(n<=1) return;
     //caminhando com o b
-    for(b=n-1,b>0;b--){
+    for(b=n-1;b>0;b--){
         if(arvores[b]->n < arvores[a]->n){
             //trocando
             temp = arvores[a];
@@ -83,7 +83,7 @@ tArvore *juntaArvores(tArvore **arvores,int n){
 tArvore *transformaStringArv(char *string){
 
     int x =0,repetidos = 0;
-    int tamanho = (int)strlen[string];
+    int tamanho = (int)strlen(string);
     int *indices = calloc(128,sizeof(int)); //inicializados como 0
     
     //contando quantos caracteres tem de cada e vendo quantos repetidos
@@ -109,7 +109,7 @@ tArvore *transformaStringArv(char *string){
 
     //ordenando o vetor de arvores
     ordenaArvores(arvores,tamanho-repetidos);
-    tArvore *temp = malloc(sizeof(tArvore*));
+    tArvore *temp;
     temp = juntaArvores(arvores,tamanho-repetidos);
     free(arvores);
 
@@ -124,11 +124,45 @@ int ehFolha(tArvore *a){
 
 }
 
+void imprimeTabela(tArvore *r, bitmap  *bm){
+
+    if(ehFolha(r)){
+
+        printf("%c - ",r->letra);
+        
+        for(int i=0;i<bitmapGetLength(bm);i++){
+            printf("%d",bitmapGetBit(bm,i));
+        }
+        printf("\n");
+        bitmapLibera(bm);
+    }
+    else{
+        bitmap *bdir = bitmapInit(8);
+        if(bm != NULL){
+            for(int i=0;i<bitmapGetLength(bm);i++){
+                bitmapAppendLeastSignificantBit(bdir,bitmapGetBit(bm,i));
+            }
+    }
+        bitmapAppendLeastSignificantBit(bdir,1);
+        imprimeTabela(r->dir,bdir);
+
+        bitmap *besq = bitmapInit(8);
+        if(bm != NULL){
+            for(int i=0;i<bitmapGetLength(bm);i++){
+                bitmapAppendLeastSignificantBit(besq,bitmapGetBit(bm,i));
+            }
+    }
+        bitmapAppendLeastSignificantBit(besq,0);
+        imprimeTabela(r->esq,besq);
+    }
+
+}
+
 
 char *traduzBits(tArvore *r, bitmap *bm){
 
     tArvore *temp = r;
-    char *string[100];
+    char string[100];
     int ind=0;
 
     for(int i=0;i< bitmapGetLength(bm);i++){
@@ -144,6 +178,7 @@ char *traduzBits(tArvore *r, bitmap *bm){
 
     }
 
+    string[ind] = '\0';
     char *string2 = strdup(string);
     return string2;
 }

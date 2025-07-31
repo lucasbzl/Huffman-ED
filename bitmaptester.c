@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void) {
-	puts("teste"); /* prints  */
+/*int main(void) {
+	puts("teste");
 
 	bitmap* bm=bitmapInit(10);
 	printf("size=%d bits\n", bitmapGetMaxSize(bm));
@@ -35,3 +35,4 @@ int main(void) {
 	return EXIT_SUCCESS;
 
 }
+*/

@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "arvore.h"
+#include "bitmap.h"
 
-void ordena(int *numeros, int n){
+/*void ordena(int *numeros, int n){
 
     int a=0,b,temp;
     
@@ -44,19 +46,13 @@ void ordena(int *numeros, int n){
 
 
 };
-
+*/
 
 
 int main(){
-
-    int numeros[11] = {7,1,1,2,2,5,3,10,9,8,6};
-
-    ordena(numeros,11);
-
-    for(int i=0; i<11;i++){
-        printf("%d ",numeros[i]);
-    }
-
+    char *tester = "bom esse bombom";
+    tArvore *arv = transformaStringArv(tester);
+    imprimeTabela(arv,NULL);
 
     return 0;
 }
