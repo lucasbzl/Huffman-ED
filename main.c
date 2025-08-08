@@ -52,9 +52,24 @@
 int main(){
     long tamanho = 0;
     unsigned char *tester = getConteudoArq("geraBinario/entrada.bin", &tamanho);
+    Celula **tabela = (Celula*)malloc(sizeof(Celula*)*256);
+    int n = 0;
 
     tArvore *arv = transformaBinArv(tester, (int) tamanho);
-    imprimeTabela(arv,NULL);
+    imprimeTabela(arv,NULL,tabela, &n);
+
+    FILE *comprimido = fopen("comprimido.bin","wb");
+    
+    for(int i=0;i<tamanho;i++){
+
+        for()
+
+    }
+    
+    
+    
+    fclose(comprimido);
+
 
     return 0;
 }

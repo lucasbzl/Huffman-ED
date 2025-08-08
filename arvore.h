@@ -3,6 +3,7 @@
 
 #include "bitmap.h"
 typedef struct arvore tArvore;
+typedef struct celula Celula;
 
 tArvore *criaArvore(char letra, int n, tArvore *dir, tArvore *esq);
 void desalocaArvore(tArvore *a);
@@ -12,7 +13,7 @@ tArvore *transformaStringArv(char *string);
 tArvore *transformaBinArv(unsigned char *conteudo, int tamanho);
 int ehFolha(tArvore *a);
 char *traduzBits(tArvore *r, bitmap *bm);
-void imprimeTabela(tArvore *r, bitmap  *bm);
+void imprimeTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n);
 unsigned char *getConteudoArq(char *nomeArq, long *tamanho);
 
 #endif
