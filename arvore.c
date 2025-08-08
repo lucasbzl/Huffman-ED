@@ -7,8 +7,8 @@
 
 struct arvore{
 
-    tArvore *dir;
-    tArvore *esq;
+    struct arvore *dir;
+    struct arvore *esq;
     char letra;
     int n;
 
@@ -117,6 +117,42 @@ tArvore *transformaStringArv(char *string){
     return temp;
 }
 
+tArvore *transformaBinArv(unsigned char *conteudo, int tamanho){
+    int x =0, repetidos = 0;
+    
+    int *indices = calloc(256,sizeof(int)); //inicializados como 0
+
+    //contando quantos caracteres tem de cada e vendo quantos repetidos
+    while (x<tamanho){
+        indices[conteudo[x]]+=1;
+        if(indices[(int)conteudo[x]]>1) repetidos++;
+        x++;
+    }
+
+    tArvore **arvores = malloc(sizeof(tArvore*)*(tamanho - repetidos));
+    int ind = 0;
+
+    for(int i=0;i<256;i++){
+
+        if(indices[i] > 0){
+            arvores[ind] = criaArvore((char)i,indices[i],NULL,NULL);
+            ind++;
+        } 
+        
+    }
+
+    free(indices);
+
+    //ordenando o vetor de arvores
+    ordenaArvores(arvores,tamanho-repetidos);
+    tArvore *temp;
+    temp = juntaArvores(arvores,tamanho-repetidos);
+    free(arvores);
+
+
+    return temp;
+}
+
 int ehFolha(tArvore *a){
 
     if(a->dir==NULL && a->esq==NULL) return 1;
@@ -183,7 +219,19 @@ char *traduzBits(tArvore *r, bitmap *bm){
     return string2;
 }
 
+unsigned char *getConteudoArq(char *nomeArq, long *tamanho){
+    FILE *f = fopen(nomeArq, "rb");
+    fseek(f, 0, SEEK_END);
+    *tamanho = ftell(f);
+    rewind(f);
 
+    unsigned char *dados = malloc(*tamanho);
+    fread(dados, 1, *tamanho, f);
+
+    fclose(f);
+
+    return dados;
+}
 
 
 

@@ -50,8 +50,10 @@
 
 
 int main(){
-    char *tester = "bom esse bombom";
-    tArvore *arv = transformaStringArv(tester);
+    long tamanho = 0;
+    unsigned char *tester = getConteudoArq("geraBinario/entrada.bin", &tamanho);
+
+    tArvore *arv = transformaBinArv(tester, (int) tamanho);
     imprimeTabela(arv,NULL);
 
     return 0;
