@@ -180,15 +180,15 @@ void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
         tabela[*n] = (Celula*)malloc(sizeof(Celula));
         tabela[*n]->byte = r->letra;
         tabela[*n]->reduzido = bm;
-        *n++;
+        (*n)++;
 
-        /*printf("%c - ",r->letra);
+        printf("%c %d- ",r->letra,bitmapGetLength(bm));
         
         for(int i=0;i<bitmapGetLength(bm);i++){
             printf("%d",bitmapGetBit(bm,i));
         }
         printf("\n");
-        bitmapLibera(bm);*/
+        //bitmapLibera(bm);
     }
     else{
         bitmap *bdir = bitmapInit(8);
@@ -209,7 +209,7 @@ void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
         bitmapAppendLeastSignificantBit(besq,0);
         criaTabela(r->esq,besq,tabela,n);
     }
-
+    //bitmapLibera(bm);
 }
 
 

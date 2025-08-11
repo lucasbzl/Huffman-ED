@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TAMANHO_MAX 500
+#define TAMANHO_MAX 20000
 #define NOME_ARQUIVO "entrada.bin"
 
 int main() {

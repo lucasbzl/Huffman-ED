@@ -3,11 +3,12 @@
 #include "arvore.h"
 #include "bitmap.h"
 
+#define Nomearq "biblia.txt"
 
 
 int main(){
     long tamanho = 0;
-    unsigned char *tester = getConteudoArq("geraBinario/entrada.bin", &tamanho);
+    unsigned char *tester = getConteudoArq(Nomearq, &tamanho);
     Celula **tabela = (Celula**)malloc(sizeof(Celula*)*256);
     int n = 0,t=0;
 
@@ -32,7 +33,8 @@ int main(){
             
         
     }
-    fwrite(bitmapGetContents(bits),(bitmapGetLength(bits)+7)/8,1,comprimido);
+    fwrite(bitmapGetContents(bits), 1, (bitmapGetLength(bits)+7)/8, comprimido);
+
     fclose(comprimido);
 
 
