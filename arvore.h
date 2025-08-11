@@ -13,7 +13,9 @@ tArvore *transformaStringArv(char *string);
 tArvore *transformaBinArv(unsigned char *conteudo, int tamanho);
 int ehFolha(tArvore *a);
 char *traduzBits(tArvore *r, bitmap *bm);
-void imprimeTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n);
+void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n);
 unsigned char *getConteudoArq(char *nomeArq, long *tamanho);
+unsigned char getByueCelula(Celula *c);
+bitmap *getBmCelula(Celula *c);
 
 #endif

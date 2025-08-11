@@ -3,71 +3,36 @@
 #include "arvore.h"
 #include "bitmap.h"
 
-/*void ordena(int *numeros, int n){
-
-    int a=0,b,temp;
-    
-    //caminhando com o b
-    if (n <= 1) return;
-    for(b=n-1;b>0;b--){
-        if(numeros[b] < numeros[a]){
-            //trocando
-            temp = numeros[a];
-            numeros[a] = numeros[b];
-            numeros[b] = temp;
-            break;
-        }
-    }
-    for(int i=0; i<n;i++){
-        printf("%d ",numeros[i]);
-    }
-    printf("\n");
-    //caminhando com o a
-    for(a=0;a<b;a++){
-        if(numeros[b] < numeros[a]){
-            //trocando
-            temp = numeros[a];
-            numeros[a]= numeros[b];
-            numeros[b] = temp;
-
-        }
-
-    }
-     for(int i=0; i<n;i++){
-        printf("%d ",numeros[i]);
-    }
-    printf("\n");
-
-    
-    //ordenando subvetores
-    ordena(numeros,a);
-    ordena(numeros+a+1,n-a-1);
-
-
-
-};
-*/
 
 
 int main(){
     long tamanho = 0;
     unsigned char *tester = getConteudoArq("geraBinario/entrada.bin", &tamanho);
-    Celula **tabela = (Celula*)malloc(sizeof(Celula*)*256);
-    int n = 0;
+    Celula **tabela = (Celula**)malloc(sizeof(Celula*)*256);
+    int n = 0,t=0;
 
     tArvore *arv = transformaBinArv(tester, (int) tamanho);
-    imprimeTabela(arv,NULL,tabela, &n);
-
-    FILE *comprimido = fopen("comprimido.bin","wb");
+    criaTabela(arv,NULL,tabela, &n);
     
+    FILE *comprimido = fopen("comprimido.bin","wb");
+
+    bitmap *bits = bitmapInit(tamanho*8);
+
+    //percorre a string
     for(int i=0;i<tamanho;i++){
 
-        for()
-
+        //acha a celula na tabela
+        for(t=0;t<n;t++){
+            if(getByueCelula(tabela[t])==tester[i]) break;
+        }
+        //imprime no arquivo comprimido
+            bitmap *temp = getBmCelula(tabela[t]);
+            for(int q=0;q<bitmapGetLength(temp);q++)
+                bitmapAppendLeastSignificantBit(bits,bitmapGetBit(temp,q));
+            
+        
     }
-    
-    
-    
+    fwrite(bitmapGetContents(bits),(bitmapGetLength(bits)+7)/8,1,comprimido);
     fclose(comprimido);
 
 

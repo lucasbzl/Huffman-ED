@@ -17,11 +17,16 @@ struct arvore{
 struct celula{
 
     unsigned char byte;
-    unsigned char reduzido;
+    bitmap *reduzido;
 
 };
 
-
+unsigned char getByueCelula(Celula *c){
+    return c->byte;
+}
+bitmap *getBmCelula(Celula *c){
+    return c->reduzido;
+}
 
 tArvore *criaArvore(char letra, int n,tArvore *dir, tArvore *esq){
 
@@ -169,14 +174,13 @@ int ehFolha(tArvore *a){
 
 }
 
-void imprimeTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
+void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
 
     if(ehFolha(r)){
-
-        tabela[*n]->byte = r->letra; 
-        unsigned char *conteudo = bitmapGetContents(bm);
-        tabela[*n]->reduzido = *conteudo;
-        (*n)++;
+        tabela[*n] = (Celula*)malloc(sizeof(Celula));
+        tabela[*n]->byte = r->letra;
+        tabela[*n]->reduzido = bm;
+        *n++;
 
         /*printf("%c - ",r->letra);
         
@@ -194,7 +198,7 @@ void imprimeTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
             }
     }
         bitmapAppendLeastSignificantBit(bdir,1);
-        imprimeTabela(r->dir,bdir, tabela, n);
+        criaTabela(r->dir,bdir, tabela, n);
 
         bitmap *besq = bitmapInit(8);
         if(bm != NULL){
@@ -203,7 +207,7 @@ void imprimeTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
             }
     }
         bitmapAppendLeastSignificantBit(besq,0);
-        imprimeTabela(r->esq,besq,tabela,n);
+        criaTabela(r->esq,besq,tabela,n);
     }
 
 }
