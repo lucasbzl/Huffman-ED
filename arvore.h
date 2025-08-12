@@ -2,6 +2,7 @@
 #define ARVORE_H
 
 #include "bitmap.h"
+#include "hash.h"
 typedef struct arvore tArvore;
 typedef struct celula Celula;
 
@@ -13,9 +14,10 @@ tArvore *transformaStringArv(char *string);
 tArvore *transformaBinArv(unsigned char *conteudo, int tamanho);
 int ehFolha(tArvore *a);
 char *traduzBits(tArvore *r, bitmap *bm);
-void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n);
+void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho);
 unsigned char *getConteudoArq(char *nomeArq, long *tamanho);
 unsigned char getByueCelula(Celula *c);
 bitmap *getBmCelula(Celula *c);
+void desalocaCelula(void *c);
 
 #endif

@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "arvore.h"
-
-#include <string.h>
+#include "hash.h"
 
 struct arvore{
 
@@ -27,6 +26,21 @@ unsigned char getByueCelula(Celula *c){
 bitmap *getBmCelula(Celula *c){
     return c->reduzido;
 }
+void desalocaCelula(void *c){
+    Celula *c2 = c;
+    bitmapLibera(c2->reduzido);
+    free(c2);
+}
+
+Celula *criaCelula(unsigned char byte, bitmap *bm){
+
+    Celula *c = (Celula*)malloc(sizeof(Celula));
+
+    c->byte = byte;
+    c->reduzido = bm;
+
+    return c;
+}
 
 tArvore *criaArvore(char letra, int n,tArvore *dir, tArvore *esq){
 
@@ -43,6 +57,7 @@ void desalocaArvore(tArvore *a){
     if(a->dir!=NULL) desalocaArvore(a->dir);
     if(a->esq!=NULL) desalocaArvore(a->esq);
     free(a);
+
 
 }
 
@@ -174,13 +189,13 @@ int ehFolha(tArvore *a){
 
 }
 
-void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
+void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
 
     if(ehFolha(r)){
-        tabela[*n] = (Celula*)malloc(sizeof(Celula));
-        tabela[*n]->byte = r->letra;
-        tabela[*n]->reduzido = bm;
-        (*n)++;
+
+        Celula *c = criaCelula(r->letra,bm);
+        Cel *c2 = criaCel(c,desalocaCelula);
+        insereVetor(hash,c2,tamanho);
 
         printf("%c %d- ",r->letra,bitmapGetLength(bm));
         
@@ -198,7 +213,7 @@ void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
             }
     }
         bitmapAppendLeastSignificantBit(bdir,1);
-        criaTabela(r->dir,bdir, tabela, n);
+        criaTabela(r->dir,bdir, hash, tamanho);
 
         bitmap *besq = bitmapInit(8);
         if(bm != NULL){
@@ -207,9 +222,11 @@ void criaTabela(tArvore *r, bitmap  *bm, Celula **tabela, int *n){
             }
     }
         bitmapAppendLeastSignificantBit(besq,0);
-        criaTabela(r->esq,besq,tabela,n);
+        criaTabela(r->esq,besq,hash,tamanho);
+
+        if(bm!=NULL)bitmapLibera(bm);
     }
-    //bitmapLibera(bm);
+    
 }
 
 
@@ -250,75 +267,3 @@ unsigned char *getConteudoArq(char *nomeArq, long *tamanho){
 
     return dados;
 }
-
-
-
-
-
-
-
-
-/*
-tArvore *insere(tArvore *r, int letra){
-
-    if(r == NULL){
-        r = (tArvore*)malloc(sizeof(tArvore));
-        r->letra = letra;
-        r->dir = r->esq = NULL;
-    }
-    else if(letra>r->letra) r->dir = insere(r->dir,letra);
-    else r->esq = insere(r->esq,letra);
-    return r;
-
-}
-
-tArvore *busca(tArvore *r,char letra){
-
-    if(r==NULL) return NULL;
-    else if(letra>r->letra) return busca(r->dir,letra);
-    else return busca(r->esq,letra);
-
-}
-
-
-//folha
-//um filho
-//dois filhos
-
-tArvore *retira(tArvore *r, int letra){
-
-    if(r==NULL) return NULL;
-    else if(letra>r->letra) r->dir = retira(r->dir,letra);
-    else if(letra<r->letra) r->esq = retira(r->esq,letra);
-    else{
-
-        if(r->dir==NULL && r->esq==NULL){
-            free(r);
-            r=NULL;
-        }
-        else if(r->esq == NULL){
-            tArvore *temp =r;
-            r = r->dir;
-            free(temp);
-
-        }
-        else if(r->dir == NULL){
-            tArvore *temp =r;
-            r = r->esq;
-            free(temp);
-        }
-        else{
-
-            tArvore *temp = r->esq;
-            while(temp->dir!=NULL) temp = temp->dir;
-
-            r->letra = temp->letra;
-            temp->letra = letra;
-            r->esq = retira(r->esq,letra);
-
-        }
-    }
-    return r;
-
-}
-    */
