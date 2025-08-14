@@ -19,20 +19,24 @@ int main(){
     Cel **tabela = criaHash(256);
 
     tArvore *arv = transformaBinArv(tester, (int) tamanho);
+    printf("passou\n");
     bitmap *bmarv = salvaArvore(arv,NULL);
+     
     criaTabela(arv,NULL,tabela, 256);
     
     FILE *comprimido = fopen("comprimido.bin","wb");
 
-    bitmap *bits = bitmapInit(tamanho*8);
+    bitmap *bits = bitmapInit(bitmapGetLength(bmarv) + tamanho * 8);
+    
     //coloca a arvore dentro do bitmap de saida
     for(int t=0;t<bitmapGetLength(bmarv);t++){
 
         bitmapAppendLeastSignificantBit(bits,bitmapGetBit(bmarv,t));
 
     }
+   
     //percorre a string
-    for(int i=0;i<tamanho;i++){
+    for(int i=bitmapGetLength(bmarv);i<tamanho;i++){
 
         //imprime no arquivo comprimido
             Cel *c = tabela[tester[i]];

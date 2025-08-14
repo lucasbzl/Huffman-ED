@@ -12,15 +12,17 @@ int main(){
 
     long tamanho = 0;
     unsigned char *tester = getConteudoArq(Nomearq, &tamanho);
-    long *n = 0;
+    long n = 0;
 
     bitmap *bits = bitmapInit(tamanho*8);
-    tArvore *r = leArvore(tester,NULL,n);
+    printf("passou\n");
     
+    tArvore *r = leArvore(tester,NULL,&n);
+     printf("passou2\n");
     
     FILE *descomprimido = fopen("descomprimido.bin","wb");
 
-    imprime(tester,tamanho,descomprimido,r,n);
+    imprime(tester,tamanho,descomprimido,r,&n);
 
 
 
@@ -28,5 +30,6 @@ int main(){
     fclose(descomprimido);
     free(tester);
     desalocaArvore(r);
+    bitmapLibera(bits);
     return 0;
 }
