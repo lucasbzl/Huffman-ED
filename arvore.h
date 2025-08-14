@@ -19,5 +19,9 @@ unsigned char *getConteudoArq(char *nomeArq, long *tamanho);
 unsigned char getByueCelula(Celula *c);
 bitmap *getBmCelula(Celula *c);
 void desalocaCelula(void *c);
+bitmap *salvaArvore(tArvore *r, bitmap *bm);
+unsigned char getBitString(unsigned char *string,long index);
+tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos);
+void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,int *lidos);
 
 #endif

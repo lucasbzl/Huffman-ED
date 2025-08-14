@@ -211,7 +211,7 @@ void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
             for(int i=0;i<bitmapGetLength(bm);i++){
                 bitmapAppendLeastSignificantBit(bdir,bitmapGetBit(bm,i));
             }
-    }
+        }
         bitmapAppendLeastSignificantBit(bdir,1);
         criaTabela(r->dir,bdir, hash, tamanho);
 
@@ -220,7 +220,7 @@ void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
             for(int i=0;i<bitmapGetLength(bm);i++){
                 bitmapAppendLeastSignificantBit(besq,bitmapGetBit(bm,i));
             }
-    }
+        }
         bitmapAppendLeastSignificantBit(besq,0);
         criaTabela(r->esq,besq,hash,tamanho);
 
@@ -266,4 +266,91 @@ unsigned char *getConteudoArq(char *nomeArq, long *tamanho){
     fclose(f);
 
     return dados;
+}
+
+
+bitmap *salvaArvore(tArvore *r, bitmap *bm){
+    bitmap *bm2;
+
+    if(bm==NULL) bm2 = bitmapInit(767);
+    else bm2 = bm;
+
+    //escreve <
+    bitmapAppendLeastSignificantBit(bm2,0);
+    bitmapAppendLeastSignificantBit(bm2,1);
+
+    //escreve a letra
+    for(int i=7; i>=0; i--){
+        int bit = (r->letra >> i) & 1;
+        bitmapAppendLeastSignificantBit(bm2, bit);
+    }
+    //faz na esquerda e depois na direita
+    if(r->esq!=NULL)salvaArvore(r->esq,bm2);
+    if(r->dir!=NULL)salvaArvore(r->dir,bm2);
+    //escreve >
+    bitmapAppendLeastSignificantBit(bm2,1);
+    bitmapAppendLeastSignificantBit(bm2,0);
+
+    return bm2;
+}
+
+unsigned char getBitString(unsigned char *string,long index){
+    return (string[index/8] >> (7-(index%8))) & 0x01;
+
+}
+//<*<*<A><*<B><C>>><D>>
+tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
+    tArvore *a = r;
+    if(a==NULL){
+        a = criaArvore('*',0,NULL,NULL);
+        *bitslidos = *bitslidos +10;
+    }
+      
+
+    //comeca com 0 1 = <
+
+    if(getBitString(string,*bitslidos+1)==0 && getBitString(string,*bitslidos+2)==1){
+        
+        bitmap *bm = bitmapInit(8);
+        for(int i =0; i< 8; i++){
+            bitmapAppendLeastSignificantBit(bm,getBitString(string,*bitslidos+i));
+        }
+        *bitslidos += 10;
+
+        
+        a->letra = bitmapGetContents(bm);
+        bitmapLibera(bm);
+        a->esq = leArvore(string,a->esq,bitslidos);
+        a->dir = leArvore(string,a->dir,bitslidos);
+        
+    }
+    else{
+        a->esq = a->dir = NULL;
+        *bitslidos = *bitslidos+2;
+        return a;
+    } 
+}
+
+
+
+void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,int *lidos){
+
+
+    tArvore *ar = r;
+    bitmap *bm = bitmapInit(tamanho);
+    for(long i=lidos;i<tamanho;i++){
+        
+        if(getBitString(string,i)==0) ar = ar->esq;
+        else ar = ar->dir;
+
+        if(ehFolha(ar)){
+            for(int q=0;q<8;q++){
+                bitmapAppendLeastSignificantBit(bm,getBitString(ar->letra,q));
+            }
+            ar = r;
+        }
+
+    }
+
+    fwrite(bitmapGetContents(bm), 1, (bitmapGetLength(bm)+7)/8, f);
 }

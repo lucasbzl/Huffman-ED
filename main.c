@@ -8,11 +8,6 @@
 #define Nomearq "biblia.txt"
 
 
-
-
-
-
-
 int main(){
 
     clock_t start, end;
@@ -24,19 +19,21 @@ int main(){
     Cel **tabela = criaHash(256);
 
     tArvore *arv = transformaBinArv(tester, (int) tamanho);
+    bitmap *bmarv = salvaArvore(arv,NULL);
     criaTabela(arv,NULL,tabela, 256);
     
     FILE *comprimido = fopen("comprimido.bin","wb");
 
     bitmap *bits = bitmapInit(tamanho*8);
+    //coloca a arvore dentro do bitmap de saida
+    for(int t=0;t<bitmapGetLength(bmarv);t++){
 
+        bitmapAppendLeastSignificantBit(bits,bitmapGetBit(bmarv,t));
+
+    }
     //percorre a string
     for(int i=0;i<tamanho;i++){
 
-        /*//acha a celula na tabela
-        for(t=0;t<n;t++){
-            if(getByueCelula(tabela[t])==tester[i]) break;
-        }*/
         //imprime no arquivo comprimido
             Cel *c = tabela[tester[i]];
         
@@ -53,6 +50,7 @@ int main(){
 
     desalocaHash(tabela,256);
     bitmapLibera(bits);
+    bitmapLibera(bmarv);
     desalocaArvore(arv);
     free(tester);
 
