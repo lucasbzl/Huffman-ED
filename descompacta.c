@@ -16,8 +16,9 @@ int main(){
 
     bitmap *bits = bitmapInit(tamanho*8);
     printf("passou\n");
-    
+    Cel **hash = criaHash(256);
     tArvore *r = leArvore(tester,NULL,&n);
+    criaTabela(r,bits,hash,tamanho);
      printf("passou2\n");
     
     FILE *descomprimido = fopen("descomprimido.bin","wb");
@@ -30,6 +31,7 @@ int main(){
     fclose(descomprimido);
     free(tester);
     desalocaArvore(r);
-    bitmapLibera(bits);
+    desalocaHash(hash,256);
+    //bitmapLibera(bits);
     return 0;
 }

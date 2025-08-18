@@ -197,7 +197,7 @@ void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
         Cel *c2 = criaCel(c,desalocaCelula);
         insereVetor(hash,c2,tamanho);
 
-        printf("%c %d- ",r->letra,bitmapGetLength(bm));
+        printf("(%c) %d- ",r->letra,bitmapGetLength(bm));
         
         for(int i=0;i<bitmapGetLength(bm);i++){
             printf("%d",bitmapGetBit(bm,i));
@@ -229,30 +229,6 @@ void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
     
 }
 
-
-char *traduzBits(tArvore *r, bitmap *bm){
-
-    tArvore *temp = r;
-    char string[100];
-    int ind=0;
-
-    for(int i=0;i< bitmapGetLength(bm);i++){
-
-        if(bitmapGetBit(bm,i)) temp = temp->dir;
-        else temp = temp->esq;
-        
-        if(ehFolha(temp)){
-            string[ind] = temp->letra;
-            ind++;
-            temp = r;
-        }
-
-    }
-
-    string[ind] = '\0';
-    char *string2 = strdup(string);
-    return string2;
-}
 
 unsigned char *getConteudoArq(char *nomeArq, long *tamanho){
     FILE *f = fopen(nomeArq, "rb");
@@ -318,18 +294,16 @@ tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
         *bitslidos += 10;
 
         unsigned char c = *(bitmapGetContents(bm));
-        printf("char :%d, bitslidos: %ld\n",c,*bitslidos);
+        r->letra = c;
+        printf("char :%c, bitslidos: %ld\n",c,*bitslidos);
         bitmapLibera(bm);
         r->esq = leArvore(string,r->esq,bitslidos);
         r->dir = leArvore(string,r->dir,bitslidos);
+        *bitslidos += 2;
         return r;
     }
-    else{
-        
-        r->esq = r->dir = NULL;
-        *bitslidos = *bitslidos+2;
-        return r;
-    } 
+    else  return NULL;
+     
 }
 
 
@@ -338,8 +312,8 @@ void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,long *lidos)
 
 
     tArvore *ar = r;
-    bitmap *bm = bitmapInit(tamanho*8);
-    for(long i=*lidos;i<tamanho;i++){
+    bitmap *bm = bitmapInit(tamanho*16);
+    for(long i=*lidos;i<tamanho*8;i++){
         
         if(getBitString(string,i)==0) ar = ar->esq;
         else ar = ar->dir;
