@@ -9,7 +9,7 @@ struct arvore{
     struct arvore *dir;
     struct arvore *esq;
     unsigned char letra;
-    int n;
+    unsigned int n;
 
 };
 
@@ -68,26 +68,16 @@ void ordenaArvores(tArvore **arvores,int n){
 
     if(n<=1) return;
     //caminhando com o b
-    for(b=n-1;b>0;b--){
-        if(arvores[b]->n < arvores[a]->n){
+    for(b=0,a=-1; b<n; b++){
+        if(arvores[b]->n <= arvores[n-1]->n){
             //trocando
+            a++;
             temp = arvores[a];
             arvores[a] = arvores[b];
             arvores[b] = temp;
-            break;
+            
         }
     }
-        //caminhando com o a
-        for(a=0;a<b;a++){
-
-            if(arvores[b]->n < arvores[a]->n){
-                //trocando
-                temp = arvores[a];
-                arvores[a]= arvores[b];
-                arvores[b] = temp;
-            }
-
-        }
 
     
     //ordenando subvetores
