@@ -21,7 +21,7 @@ int main(){
     tArvore *arv = transformaBinArv(tester, (int) tamanho);
     printf("passou\n");
     bitmap *bmarv = salvaArvore(arv,NULL);
-     
+    printf("tamanho arvore: %d",bitmapGetLength(bmarv));
     criaTabela(arv,NULL,tabela, 256);
     
     FILE *comprimido = fopen("comprimido.bin","wb");
@@ -36,7 +36,7 @@ int main(){
     }
    
     //percorre a string
-    for(int i=bitmapGetLength(bmarv);i<tamanho;i++){
+    for(int i=0;i<tamanho;i++){
 
         //imprime no arquivo comprimido
             Cel *c = tabela[tester[i]];
@@ -45,9 +45,13 @@ int main(){
 
             for(int q=0;q<bitmapGetLength(temp);q++)
                 bitmapAppendLeastSignificantBit(bits,bitmapGetBit(temp,q));
-            
-        
     }
+
+    printf("\nTotal de bits esperados: %d\n", bitmapGetLength(bits));
+    printf("Equivalente em bytes: %d\n", (bitmapGetLength(bits)+7)/8);
+
+
+
     fwrite(bitmapGetContents(bits), 1, (bitmapGetLength(bits)+7)/8, comprimido);
 
     fclose(comprimido);

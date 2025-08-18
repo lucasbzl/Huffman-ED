@@ -134,4 +134,15 @@ void bitmapLibera (bitmap* bm){
     free (bm);
 }
 
+void bitmapCopia(bitmap *or , bitmap *copia){
+
+	for(int i=0;i<(or->length+7)/8;i++){
+		copia->contents[i] = or->contents[i];
+	}
+
+	copia->length = or->length;
+	
+	copia->max_size = or->max_size;
+
+}	
 

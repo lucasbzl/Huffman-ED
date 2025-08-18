@@ -18,5 +18,6 @@ bitmap* bitmapInit(unsigned int max_size);
 unsigned char bitmapGetBit(bitmap* bm, unsigned int index);
 void bitmapAppendLeastSignificantBit(bitmap* bm, unsigned char bit);
 void bitmapLibera (bitmap* bm);
+void bitmapCopia(bitmap *or , bitmap *copia);
 
 #endif /*BITMAP_H_*/

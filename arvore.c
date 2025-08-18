@@ -90,11 +90,13 @@ tArvore *juntaArvores(tArvore **arvores,int n){
     if(n<=1) return arvores[0];
     tArvore *temp = criaArvore('\0',arvores[0]->n + arvores[1]->n,arvores[1],arvores[0]);
 
-    
-    for(int i=0;i<n-2;i++){
-        arvores[i] = arvores[i+2];
+    arvores[1] = temp;
+    temp = arvores[0];
+    for(int i=0;i<n-1;i++){
+        arvores[i] = arvores[i+1];
     }
-    arvores[n-2] = temp;
+    arvores[n-1] = temp;
+    ordenaArvores(arvores,n-1);
 
     return juntaArvores(arvores,n-1);
 }
@@ -196,23 +198,17 @@ void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
         //bitmapLibera(bm);
     }
     else{
-        bitmap *bdir = bitmapInit(8);
-        if(bm != NULL){
-            for(int i=0;i<bitmapGetLength(bm);i++){
-                bitmapAppendLeastSignificantBit(bdir,bitmapGetBit(bm,i));
-            }
-        }
+        bitmap *bdir = bitmapInit(255);
+        if(bm!=NULL)bitmapCopia(bm,bdir);
+        
         bitmapAppendLeastSignificantBit(bdir,1);
         criaTabela(r->dir,bdir, hash, tamanho);
 
-        bitmap *besq = bitmapInit(8);
-        if(bm != NULL){
-            for(int i=0;i<bitmapGetLength(bm);i++){
-                bitmapAppendLeastSignificantBit(besq,bitmapGetBit(bm,i));
-            }
-        }
-        bitmapAppendLeastSignificantBit(besq,0);
-        criaTabela(r->esq,besq,hash,tamanho);
+        bitmap *besq = bitmapInit(255);
+         if(bm!=NULL)bitmapCopia(bm,besq);
+        
+         bitmapAppendLeastSignificantBit(besq,0);
+         criaTabela(r->esq,besq,hash,tamanho);
 
         if(bm!=NULL)bitmapLibera(bm);
     }
@@ -258,7 +254,7 @@ bitmap *salvaArvore(tArvore *r, bitmap *bm){
     //escreve >
     bitmapAppendLeastSignificantBit(bm2,1);
     bitmapAppendLeastSignificantBit(bm2,0);
-
+    
     return bm2;
 }
 
