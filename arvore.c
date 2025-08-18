@@ -60,7 +60,7 @@ void desalocaArvore(tArvore *a){
 
 
 }
-
+//ordena um vetor de arvores pelas frequencias em ordem crescente
 void ordenaArvores(tArvore **arvores,int n){
 
     int a=0,b;
@@ -84,7 +84,7 @@ void ordenaArvores(tArvore **arvores,int n){
     ordenaArvores(arvores,a);
     ordenaArvores(arvores+a+1,n-a-1);
 }
-
+//junta um vetor de arvores em uma arvore so
 tArvore *juntaArvores(tArvore **arvores,int n){
 
     if(n<=1) return arvores[0];
@@ -101,43 +101,8 @@ tArvore *juntaArvores(tArvore **arvores,int n){
     return juntaArvores(arvores,n-1);
 }
 
-tArvore *transformaStringArv(char *string){
 
-    int x =0,repetidos = 0;
-    int tamanho = (int)strlen(string);
-    int *indices = calloc(128,sizeof(int)); //inicializados como 0
-    
-    //contando quantos caracteres tem de cada e vendo quantos repetidos
-    while (x<tamanho){
-        indices[(int)string[x]]+=1;
-        if(indices[(int)string[x]]>1) repetidos++;
-        x++;
-    }
-
-    //fazendo a reducao de um vetor de 128 pra um menor
-    tArvore **arvores = malloc(sizeof(tArvore*)*(tamanho-repetidos));
-    int ind = 0;
-
-    for(int i=0;i<128;i++){
-
-        if(indices[i]!=0){
-            arvores[ind] = criaArvore((char)i,indices[i],NULL,NULL);
-            ind++;
-        } 
-        
-    }
-    free(indices);
-
-    //ordenando o vetor de arvores
-    ordenaArvores(arvores,tamanho-repetidos);
-    tArvore *temp;
-    temp = juntaArvores(arvores,tamanho-repetidos);
-    free(arvores);
-
-
-    return temp;
-}
-
+//calcula a frequencia de cada caractere e devolve uma arvore de huffman
 tArvore *transformaBinArv(unsigned char *conteudo, int tamanho){
     int x =0, repetidos = 0;
     
@@ -173,14 +138,14 @@ tArvore *transformaBinArv(unsigned char *conteudo, int tamanho){
 
     return temp;
 }
-
+//verifica se eh folha
 int ehFolha(tArvore *a){
 
     if(a->dir==NULL && a->esq==NULL) return 1;
     else return 0;
 
 }
-
+//transforma uma arvore em um vetor de celulas, contendo um char e seu equivalente reduzido
 void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
 
     if(ehFolha(r)){
@@ -215,7 +180,7 @@ void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
     
 }
 
-
+//le o arquivo de texto, devolve uma string e seu tamanho 
 unsigned char *getConteudoArq(char *nomeArq, long *tamanho){
     FILE *f = fopen(nomeArq, "rb");
     fseek(f, 0, SEEK_END);
@@ -230,9 +195,12 @@ unsigned char *getConteudoArq(char *nomeArq, long *tamanho){
     return dados;
 }
 
+
+
+//transforma uma arvore em uma sequencia de bits para coloca-los no inicio do arquivo comprimido
 //<*<*<A><*<B><C>>><D>>
-// < 01
-// > 10
+// <  = 01
+// >  = 10
 bitmap *salvaArvore(tArvore *r, bitmap *bm){
     bitmap *bm2;
 
@@ -257,11 +225,12 @@ bitmap *salvaArvore(tArvore *r, bitmap *bm){
     
     return bm2;
 }
-
+//pega um bit de uma string
 unsigned char getBitString(unsigned char *string,long index){
     return (string[index/8] >> (7-(index%8))) & 0x01;
 
 }
+//le a arvore que foi escrita no começo do arquivo comprimido
 //<*<*<A><*<B><C>>><D>>
 tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
    
@@ -269,8 +238,7 @@ tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
         r = criaArvore('\0',0,NULL,NULL);
     }
     
-    //comeca com 0 1 = <
-
+    //se comeca com 0 1 = <
     if(getBitString(string,*bitslidos)==0 && getBitString(string,*bitslidos+1)==1){
         
         bitmap *bm = bitmapInit(8);
@@ -292,8 +260,7 @@ tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
      
 }
 
-
-
+//descomprime um arquivo comprimido, tendo uma arvore de codificação
 void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,long *lidos){
 
 
