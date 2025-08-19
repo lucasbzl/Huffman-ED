@@ -1,30 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "arvore.h"
 #include "bitmap.h"
 #include "hash.h"
 #include <time.h> 
 
-#define Nomearq "biblia.txt"
 
-
-int main(){
+int main(int agrgc , char *argv[]){
 
     clock_t start, end;
     start = clock();
     double cpu_time_used;
+    
 
     long tamanho = 0;
-    unsigned char *tester = getConteudoArq(Nomearq, &tamanho);
+    unsigned char *tester = getConteudoArq(argv[1], &tamanho);
     Cel **tabela = criaHash(256);
 
     tArvore *arv = transformaBinArv(tester, (int) tamanho);
-    printf("passou\n");
+   
     bitmap *bmarv = salvaArvore(arv,NULL);
-    printf("tamanho arvore: %d",bitmapGetLength(bmarv));
-    criaTabela(arv,NULL,tabela, 256);
     
-    FILE *comprimido = fopen("comprimido.bin","wb");
+    criaTabela(arv,NULL,tabela, 256);
+
+    
 
     bitmap *bits = bitmapInit(bitmapGetLength(bmarv) + tamanho * 8);
     
@@ -47,21 +47,22 @@ int main(){
                 bitmapAppendLeastSignificantBit(bits,bitmapGetBit(temp,q));
     }
 
-    printf("\nTotal de bits esperados: %d\n", bitmapGetLength(bits));
-    printf("Equivalente em bytes: %d\n", (bitmapGetLength(bits)+7)/8);
+   
 
+    char *nomeArq = strcat(argv[1],".comp");
+    FILE *comprimido = fopen(nomeArq,"wb");
 
+    bitmapLibera(bmarv);
+    desalocaArvore(arv);
+    desalocaHash(tabela,256);
+    free(tester);
 
     fwrite(bitmapGetContents(bits), 1, (bitmapGetLength(bits)+7)/8, comprimido);
 
     fclose(comprimido);
-
-    desalocaHash(tabela,256);
     bitmapLibera(bits);
-    bitmapLibera(bmarv);
-    desalocaArvore(arv);
-    free(tester);
-
+    
+    
     end = clock();
 
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
