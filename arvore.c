@@ -256,7 +256,11 @@ tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
         *bitslidos += 2;
         return r;
     }
-    else  return NULL;
+    else  {
+        desalocaArvore(r);
+        return NULL;
+    
+    }
      
 }
 
