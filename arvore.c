@@ -154,13 +154,6 @@ void criaTabela(tArvore *r, bitmap  *bm, Cel **hash, int tamanho){
         Cel *c2 = criaCel(c,desalocaCelula);
         insereVetor(hash,c2,tamanho);
 
-        printf("(%c) %d- ",r->letra,bitmapGetLength(bm));
-        
-        for(int i=0;i<bitmapGetLength(bm);i++){
-            printf("%d",bitmapGetBit(bm,i));
-        }
-        printf("\n");
-        //bitmapLibera(bm);
     }
     else{
         bitmap *bdir = bitmapInit(255);
@@ -249,7 +242,7 @@ tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
 
         unsigned char c = *(bitmapGetContents(bm));
         r->letra = c;
-        printf("char :%c, bitslidos: %ld\n",c,*bitslidos);
+     
         bitmapLibera(bm);
         r->esq = leArvore(string,r->esq,bitslidos);
         r->dir = leArvore(string,r->dir,bitslidos);
