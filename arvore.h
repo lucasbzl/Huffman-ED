@@ -20,6 +20,6 @@ void desalocaCelula(void *c);
 bitmap *salvaArvore(tArvore *r, bitmap *bm);
 unsigned char getBitString(unsigned char *string,long index);
 tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos);
-void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,long *lidos);
+void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,long *lidos,int inuteis);
 
 #endif

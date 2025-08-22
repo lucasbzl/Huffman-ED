@@ -265,20 +265,18 @@ tArvore *leArvore(unsigned char *string,tArvore *r,long *bitslidos){
 }
 
 //descomprime um arquivo comprimido, tendo uma arvore de codificação
-void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,long *lidos){
+void imprime(unsigned char *string, long tamanho,FILE *f,tArvore *r,long *lidos,int inuteis){
 
 
     tArvore *ar = r;
     bitmap *bm = bitmapInit(tamanho*16);
-    for(long i=*lidos;i<tamanho*8;i++){
+    for(long i=*lidos;i<tamanho*8 - inuteis;i++){
         
         if(getBitString(string,i)==0) ar = ar->esq;
         else ar = ar->dir;
 
         if(ehFolha(ar)){
-            for(int q=7; q>=0; q--){
-                bitmapAppendLeastSignificantBit(bm, (ar->letra >> q) & 1);
-            }
+            fwrite(&ar->letra,1,1,f);
             ar = r;
         }
 

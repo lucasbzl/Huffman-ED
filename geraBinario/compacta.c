@@ -56,7 +56,10 @@ int main(int agrgc , char *argv[]){
     desalocaArvore(arv);
     desalocaHash(tabela,256);
     free(tester);
-
+    
+    char inutil = bitmapGetLength(bits)%8;
+    
+    fwrite(&inutil, 1, 1, comprimido);
     fwrite(bitmapGetContents(bits), 1, (bitmapGetLength(bits)+7)/8, comprimido);
 
     fclose(comprimido);
