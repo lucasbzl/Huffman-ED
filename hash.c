@@ -1,3 +1,15 @@
+/**
+ * @file hash.h
+ * @author Lucas Bastos
+ *          Mateus Lizardo
+ * @brief TAD que contém as funções da tabela Hash, que armazena as informações da árvore de Huffman
+ * @version 0.1
+ * @date 2025-08-24
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "hash.h"
