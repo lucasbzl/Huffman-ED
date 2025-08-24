@@ -1,3 +1,15 @@
+/**
+ * @file compacta.c
+ * @author Lucas Bastos
+ *          Mateus Lizardo
+ * @brief Comprime um arquivo pela codificação de Huffman
+ * @version 0.1
+ * @date 2025-08-24
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
