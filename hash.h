@@ -47,13 +47,7 @@ Cel **criaHash(int tamanho);
  */
 void desalocaCel(Cel *h);
 
-/**
- * @brief Insere uma célula em outra (lista encadeada).
- * 
- * @param h Ponteiro para a célula principal.
- * @param h2 Ponteiro para a célula a ser inserida.
- */
-void insereCel(Cel *h, Cel *h2);
+
 
 /**
  * @brief Função de hash para obter o índice a partir de um byte.
