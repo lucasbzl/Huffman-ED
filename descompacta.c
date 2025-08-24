@@ -34,8 +34,13 @@ int main(int argc , char *argv[]){
     tArvore *r = leArvore(tester,NULL,&n);
 
      //traduz a codificação de huffman para o arquivo descomprimido
-    char *nomeArq = strcat(argv[1],".descomp");
-    FILE *descomprimido = fopen(nomeArq,"wb");
+   
+    for(int i=strlen(argv[1])-5;i<strlen(argv[1]);i++){
+            argv[1][i] = '\0';
+        }
+
+    FILE *descomprimido = fopen(argv[1],"wb");
+    
 
     imprime(tester,tamanho,descomprimido,r,&n,inuteis);
 
